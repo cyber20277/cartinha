@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Feliz Aniversário ❤️</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Música opcional (descomente se quiser) -->
+  <audio id="musicaFundo" loop>
+    <source src="/" type="audio/mpeg">
+  </audio>
+  
+
+  <!-- ===== TELA 1 - HERO ===== -->
+  <section id="hero" class="hero">
+    <h1>Feliz Aniversário, Meu Amor ❤️</h1>
+    <p>Hoje o dia é seu, mas o presente quem ganha sou eu…</p>
+    <button class="btn" id="btnSurpresa">Clique para uma surpresa</button>
+    <div class="floating-hearts" id="herosHearts"></div>
+  </section>
+
+  <!-- ===== TELA 2 - CARROSSEL FOTOS ===== -->
+  <section id="fotos" class="carrossel-section hidden-section">
+    <h2 style="color:#af4c5e;">Seus momentos ❤️📸</h2>
+    <div class="carrossel">
+      <!-- CAMINHOS FICTÍCIOS: Substitua pelos caminhos reais das suas imagens -->
+      <div class="carrossel-item foto1" style="background-image: url('/img/1.jpg');"><span>💕</span></div>
+      <div class="carrossel-item foto2" style="background-image: url('/img/2.jpg');"><span>💕</span></div>
+      <div class="carrossel-item foto3" style="background-image: url('/img/3.jpg');"><span>🌹</span></div>
+      <div class="carrossel-item foto4" style="background-image: url('/img/4.jpg');"><span>🌹</span></div>
+    </div>
+    <p class="hint">⟶ deslize ⟶</p>
+    <button class="btn" id="btnProximo1">Continuar 💌</button>
+  </section>
+
+  <!-- ===== TELA 3 - CARTA ROMÂNTICA ===== -->
+  <section id="carta" class="carta hidden-section">
+    <h2>Uma cartinha que eu fiz pra você</h2>
+    <div class="texto-carta" id="cartaTexto">
+      Meu amor, desde que você chegou, meus dias ganharam cor. 
+      Seu sorriso é meu lugar favorito. 
+      No seu aniversário, queria te dar o mundo… 
+      mas começo te dando meu coração, mais uma vez. 
+      Você é a pessoa mais incrível que já conheci. 
+      Te amar é simples e imenso ao mesmo tempo.
+    </div>
+    <button class="btn" id="btnProximo2">Quero te perguntar algo 💍</button>
+  </section>
+
+  <!-- ===== TELA 4 - PEDIDO OFICIAL ===== -->
+  <section id="pedido" class="pedido hidden-section">
+    <h2>Você aceita namorar comigo? 💍❤️</h2>
+    <div class="botoes-pedido">
+      <button class="btn btn-sim" id="btnSim">SIM ❤️</button>
+      <button class="btn btn-nao" id="btnNao">NÃO 😢</button>
+    </div>
+  </section>
+
+  <!-- ===== TELA 5 - FINAL OFICIAL ===== -->
+  <section id="final" class="tela-final hidden-section">
+    <div class="mensagem-final">Agora é oficial! TE AMOOOO ❤️</div>
+    <div class="floating-hearts" id="finalHearts"></div>
+  </section>
+
+  <!-- container para corações da explosão -->
+  <div id="explosionHearts" class="shower-hearts" style="pointer-events: none;"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
