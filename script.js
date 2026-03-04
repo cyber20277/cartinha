@@ -1,5 +1,5 @@
 (function() {
-  // elementos principais
+  // ===== ELEMENTOS PRINCIPAIS =====
   const hero = document.getElementById('hero');
   const fotos = document.getElementById('fotos');
   const carta = document.getElementById('carta');
@@ -12,82 +12,157 @@
   const btnSim = document.getElementById('btnSim');
   const btnNao = document.getElementById('btnNao');
   
-  // audio (opcional)
+  // ===== ELEMENTOS DE ÁUDIO =====
   const musica = document.getElementById('musicaFundo');
+  const audioControl = document.getElementById('audio-control');
+  const ativarAudio = document.getElementById('ativarAudio');
   
-  // função para mostrar seção e esconder outras
+  // ===== CONFIGURAÇÃO INICIAL =====
+  let musicaTocando = false;
+  
+  // Mostra apenas a seção hero inicialmente
   function showSection(target) {
-    [hero, fotos, carta, pedido, final].forEach(sec => sec.classList.add('hidden-section'));
+    [hero, fotos, carta, pedido, final].forEach(sec => {
+      sec.classList.add('hidden-section');
+    });
     target.classList.remove('hidden-section');
-    // rolar topo suave
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
-  // Botão SURPRESA: hero -> fotos
-  btnSurpresa.addEventListener('click', (e) => {
-    e.preventDefault();
-    showSection(fotos);
-    // musica play (descomente se quiser)
-    // musica.play().catch(()=>{});
-  });
   
-  btnProximo1.addEventListener('click', () => showSection(carta));
-  btnProximo2.addEventListener('click', () => showSection(pedido));
+  showSection(hero);
   
-  // BOTÃO SIM: animação de corações e vai pra final
-  btnSim.addEventListener('click', (e) => {
-    e.preventDefault();
-    // explosão de corações
-    for (let i = 0; i < 24; i++) {
-      createHeart('explosionHearts', true);
+  // ===== CONFIGURAÇÃO DA MÚSICA =====
+  if (musica) {
+    musica.volume = 0.4;
+    
+    // Função para tocar música
+    function playMusic() {
+      if (!musicaTocando) {
+        musica.play()
+          .then(() => {
+            musicaTocando = true;
+            audioControl.style.display = 'none';
+          })
+          .catch(e => {
+            console.log('Aguardando interação do usuário');
+          });
+      }
     }
-    // depois de 0.5s vai pra tela final e inicia corações contínuos
+    
+    // Tenta tocar automaticamente (pode falhar no celular)
+    playMusic();
+    
+    // Botão manual para ativar áudio
+    if (ativarAudio) {
+      ativarAudio.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        playMusic();
+      });
+      
+      ativarAudio.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        playMusic();
+      });
+    }
+    
+    // Se clicar em qualquer lugar, tenta tocar (para navegadores que exigem interação)
+    document.addEventListener('click', function initAudio() {
+      playMusic();
+      document.removeEventListener('click', initAudio);
+    }, { once: true });
+    
+    document.addEventListener('touchstart', function initAudio() {
+      playMusic();
+      document.removeEventListener('touchstart', initAudio);
+    }, { once: true });
+  }
+  
+  // ===== FUNÇÕES DE NAVEGAÇÃO =====
+  function handleNavigation(targetSection) {
+    return function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      showSection(targetSection);
+    };
+  }
+  
+  // ===== EVENTOS DE CLIQUE (com suporte a touch) =====
+  btnSurpresa.addEventListener('click', handleNavigation(fotos));
+  btnSurpresa.addEventListener('touchstart', handleNavigation(fotos));
+  
+  btnProximo1.addEventListener('click', handleNavigation(carta));
+  btnProximo1.addEventListener('touchstart', handleNavigation(carta));
+  
+  btnProximo2.addEventListener('click', handleNavigation(pedido));
+  btnProximo2.addEventListener('touchstart', handleNavigation(pedido));
+  
+  // ===== BOTÃO SIM =====
+  function handleSim(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Explosão de corações
+    for (let i = 0; i < 24; i++) {
+      setTimeout(() => createHeart('explosionHearts'), i * 30);
+    }
+    
+    // Vai para tela final
     setTimeout(() => {
       showSection(final);
-      // encher de corações por um tempo
+      
+      // Cria corações contínuos
       for (let i = 0; i < 10; i++) {
-        setTimeout(() => createHeart('finalHearts'), i * 200);
+        setTimeout(() => createHeart('finalHearts'), i * 100);
       }
-      // loop a cada 1s
+      
+      // Loop de corações
       if (window.heartInterval) clearInterval(window.heartInterval);
-      window.heartInterval = setInterval(() => createHeart('finalHearts'), 600);
+      window.heartInterval = setInterval(() => createHeart('finalHearts'), 500);
     }, 400);
-  });
-
-  // BOTÃO NÃO: comportamento fujão
-  btnNao.addEventListener('mouseover', (e) => fugirBotao(e));
-  btnNao.addEventListener('touchstart', (e) => {
-    e.preventDefault();  // evitar clique duplo
-    fugirBotao(e);
-  });
+  }
   
+  btnSim.addEventListener('click', handleSim);
+  btnSim.addEventListener('touchstart', handleSim);
+  
+  // ===== BOTÃO NÃO (FUGÃO) =====
   function fugirBotao(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
     const btn = btnNao;
     const parent = btn.parentElement;
-    const maxX = parent.clientWidth - btn.clientWidth - 20;
-    const maxY = parent.clientHeight - btn.clientHeight - 20;
-    if (maxX < 10 || maxY < 10) return;  // sem espaço
-
-    let novoX = Math.random() * maxX;
-    let novoY = Math.random() * maxY;
-    // deslocar relativo
-    btn.style.position = 'relative';
+    const btnRect = btn.getBoundingClientRect();
+    const parentRect = parent.getBoundingClientRect();
+    
+    const maxX = parentRect.width - btnRect.width - 20;
+    const maxY = parentRect.height - btnRect.height - 20;
+    
+    if (maxX < 10 || maxY < 10) return;
+    
+    const novoX = Math.random() * maxX;
+    const novoY = Math.random() * maxY;
+    
+    btn.style.position = 'absolute';
     btn.style.left = novoX + 'px';
     btn.style.top = novoY + 'px';
-    btn.classList.add('fugindo');
-    setTimeout(() => btn.classList.remove('fugindo'), 300);
+    btn.style.transition = 'left 0.2s ease, top 0.2s ease';
+    
+    setTimeout(() => {
+      btn.style.transition = '';
+    }, 200);
   }
-
-  // também ao tentar clicar, foge (caso toque direto)
-  btnNao.addEventListener('click', (e) => {
-    e.preventDefault();
-    fugirBotao(e);
-  });
-
-  // função para criar corações flutuantes
-  function createHeart(containerId, randomPos = true) {
+  
+  btnNao.addEventListener('mouseover', fugirBotao);
+  btnNao.addEventListener('touchstart', fugirBotao);
+  btnNao.addEventListener('click', fugirBotao);
+  
+  // ===== FUNÇÃO PARA CRIAR CORAÇÕES =====
+  function createHeart(containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
+    
     const heart = document.createElement('div');
     heart.classList.add('heart');
     heart.innerHTML = '❤️';
@@ -95,29 +170,24 @@
     heart.style.fontSize = (Math.random() * 2 + 1) + 'rem';
     heart.style.animationDuration = (Math.random() * 4 + 4) + 's';
     heart.style.opacity = Math.random() * 0.6 + 0.3;
+    
     container.appendChild(heart);
     setTimeout(() => heart.remove(), 8000);
   }
-
-  // corações iniciais no hero (ambiente)
+  
+  // ===== CORAÇÕES AMBIENTE NO HERO =====
   setInterval(() => {
     if (!hero.classList.contains('hidden-section')) {
       createHeart('herosHearts');
     }
   }, 800);
-
-  // opcional: prevenir menu contexto em botoes (celular)
-  window.addEventListener('contextmenu', e => e.preventDefault());
-
-  // iniciar com hero apenas
-  showSection(hero);
-
-  // botões grandes e sem zoom indesejado
+  
+  // ===== PREVENIR ZOOM NOS BOTÕES =====
   const allBtns = document.querySelectorAll('.btn');
   allBtns.forEach(btn => {
     btn.addEventListener('touchstart', (e) => {
-      e.preventDefault();  // evita zoom duplo
+      e.preventDefault();
     }, { passive: false });
   });
-
+  
 })();

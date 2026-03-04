@@ -8,11 +8,18 @@
 </head>
 <body>
 
-  <!-- Música opcional (descomente se quiser) -->
+  <!-- Áudio com autoplay - Arquivo local -->
   <audio id="musicaFundo" loop>
-    <source src="/" type="audio/mpeg">
+    <!-- Coloque seu arquivo de música na mesma pasta do site -->
+    <source src="musica.mp3" type="audio/mpeg">
+    <source src="musica.ogg" type="audio/ogg">
+    Seu navegador não suporta áudio HTML5.
   </audio>
   
+  <!-- Botão para ativar o áudio -->
+  <div id="audio-control" class="audio-control">
+    <button class="btn audio-btn" id="ativarAudio">🎵 Ativar música 🎵</button>
+  </div>
 
   <!-- ===== TELA 1 - HERO ===== -->
   <section id="hero" class="hero">
@@ -24,13 +31,13 @@
 
   <!-- ===== TELA 2 - CARROSSEL FOTOS ===== -->
   <section id="fotos" class="carrossel-section hidden-section">
-    <h2 style="color:#af4c5e;">Seus momentos ❤️📸</h2>
+    <h2 style="color:#af4c5e;">Nossos momentos 📸</h2>
     <div class="carrossel">
-      <!-- CAMINHOS FICTÍCIOS: Substitua pelos caminhos reais das suas imagens -->
-      <div class="carrossel-item foto1" style="background-image: url('/img/1.jpg');"><span>💕</span></div>
-      <div class="carrossel-item foto2" style="background-image: url('/img/2.jpg');"><span>💕</span></div>
-      <div class="carrossel-item foto3" style="background-image: url('/img/3.jpg');"><span>🌹</span></div>
-      <div class="carrossel-item foto4" style="background-image: url('/img/4.jpg');"><span>🌹</span></div>
+      <div class="carrossel-item" style="background-image: url('foto1.jpg');"><span>💕 2023</span></div>
+      <div class="carrossel-item" style="background-image: url('foto2.jpg');"><span>☀️ praia</span></div>
+      <div class="carrossel-item" style="background-image: url('foto3.jpg');"><span>🌹 date</span></div>
+      <div class="carrossel-item" style="background-image: url('foto4.jpg');"><span>🎂 bolo</span></div>
+      <div class="carrossel-item" style="background-image: url('foto5.jpg');"><span>✨ nós dois</span></div>
     </div>
     <p class="hint">⟶ deslize ⟶</p>
     <button class="btn" id="btnProximo1">Continuar 💌</button>
@@ -38,7 +45,7 @@
 
   <!-- ===== TELA 3 - CARTA ROMÂNTICA ===== -->
   <section id="carta" class="carta hidden-section">
-    <h2>Uma cartinha que eu fiz pra você</h2>
+    <h2>Uma cartinha pra você</h2>
     <div class="texto-carta" id="cartaTexto">
       Meu amor, desde que você chegou, meus dias ganharam cor. 
       Seu sorriso é meu lugar favorito. 
@@ -61,7 +68,7 @@
 
   <!-- ===== TELA 5 - FINAL OFICIAL ===== -->
   <section id="final" class="tela-final hidden-section">
-    <div class="mensagem-final">Agora é oficial! TE AMOOOO ❤️</div>
+    <div class="mensagem-final">Agora é oficial! ❤️</div>
     <div class="floating-hearts" id="finalHearts"></div>
   </section>
 
